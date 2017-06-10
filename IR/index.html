@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>mr. Moose</title>
+    <!-- 推荐：根据需要加载，引入基础框架 -->
+    <script src="lib/jparticles.js"></script>
+    <!-- 引入粒子特效 -->
+    <script src="lib/particle.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html{
+            width: 100%;
+            height: 100%;
+        }
+        body{
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        #demo {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        #wrap {
+            width: 600px;
+            height: 420px;
+            background-color: #B4D8F3;
+            z-index: 1000;
+            position: absolute;
+            top: 50%;
+            margin-top: -210px;
+            left: 50%;
+            margin-left: -300px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 4px #666;
+            text-align: center;
+        }
+        #title{
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content:center;
+        }
+        h1{
+            color: #38667D;
+        }
+    </style>
+</head>
+<body>
+    <!-- 准备一个具有一定宽高的 DOM 元素，不然生成的 Canvas 默认宽高为：485，300 -->
+    <div id="demo">
+        
+    </div>
+    <div id="wrap">
+        <div id="title">
+            <img src="images/moose.png" alt="">
+            <h1>年报章节的自动提取和分句</h1>
+        </div>
+        <div>
+            <a href="clauses.html">clauses</a>
+            <a href=""></a>
+            <a href=""></a>
+        </div>
+    </div>
+
+    <script>
+        // 使用 new JParticles.特效名 创建特效
+        new JParticles.particle('#demo',{
+            // 两粒子圆心点之间的直线距离为 90
+            lineShape: 'cube',
+            proximity: 100,
+            // 定位点半径 100 以内（包含）的所有粒子，圆心点之间小于等于 proximity 值，则连线
+            range: 2000
+        });
+    </script>
+</body>
+</html>
