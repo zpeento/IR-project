@@ -63,47 +63,98 @@
     		
             var sentence = ''
 
-            //当该句子的行数大于一时，说明该句子占据多行
-    		if(item_processed.length>1){
-    			
-                //获取最后一行（即连接句号的那一行）的下标
-    			var last_index = item_processed.length - 1
+            //item_processed数组第一项是空字符串，即说明该段落以换行符开头。否则即不以换行符开头
 
-                //result_sentence数组用于存放合适的行
-    			var result_sentence = [item_processed[last_index]]
-
-                //对句子的除最后一行外的每一行，以从下往上的顺序进行循环
-	    		for(var i = item_processed.length-2 ; i > -1 ; i--){
-
-                    //当遍历到出现有一行的字符数小于特定的长度时，可以判定该行以及该行往上的文本都不是句子的部分。
-                    //tips!!
-	    			if(item_processed[i].length < 30){
-	    				break
-	    			}
-
-                    //将通过判定的行添加到数组前面
-	    			result_sentence.unshift(item_processed[i]);
-	    		}
-
-                //数组拼接即得到完整的句子
-	    		sentence = result_sentence.join('')
-    		}else if(item_processed.length == 1){
-                //当句子只占据一行时
-                sentence = item_processed[0]
+            if(item_processed[0] == ''){
+                sentence = senStartWithLineFeeds(item_processed)
             }else{
-                alert('wtf')
+                sentence = senStartWithNone(item_processed)
             }
-    		return sentence
+
+            return sentence
     	})
 
-    	// console.log(arr_processed)
+    	console.log(arr_processed)
     }
 
+    //测试一个指定的段落
     function testOneItem (oneItem) {
         var item_processed = oneItem.split(/\n/g);
         console.log(item_processed)
+        console.log(senStartWithNone(item_processed))
     }
 
+    //当段落以换行符开头
+    function senStartWithLineFeeds (item_processed) {
+        var sentence = '';
+
+        //当该句子的行数大于一时，说明该句子占据多行
+        if(item_processed.length>1){
+                
+            //获取最后一行（即连接句号的那一行）的下标
+            var last_index = item_processed.length - 1
+
+            //result_sentence数组用于存放合适的行
+            var result_sentence = [item_processed[last_index]]
+
+            //对句子的除最后一行外的每一行，以从下往上的顺序进行循环
+            for(var i = item_processed.length-2 ; i > -1 ; i--){
+
+                //当遍历到出现有一行的字符数小于特定的长度时，可以判定该行以及该行往上的文本都不是句子的部分。
+                if(item_processed[i].length < 30){
+                    break
+                }
+
+                //将通过判定的行添加到数组前面
+                result_sentence.unshift(item_processed[i]);
+            }
+
+            //数组拼接即得到完整的句子
+            sentence = result_sentence.join('')
+        }else if(item_processed.length == 1){
+            //当句子只占据一行时
+            sentence = item_processed[0]
+        }else{
+            alert('wtf')
+        }
+        return sentence
+    }
+
+    //当句子不以换行开头
+    function senStartWithNone (item_processed) {
+        var sentence = '';
+
+        //当该句子的行数大于一时，说明该句子占据多行
+        if(item_processed.length>1){
+                
+            //获取最后一行（即连接句号的那一行）的下标
+            var last_index = item_processed.length - 1
+
+            //result_sentence数组用于存放合适的行
+            var result_sentence = [item_processed[last_index]]
+
+            //对句子的除最后一行外的每一行，以从下往上的顺序进行循环
+            for(var i = item_processed.length-2 ; i > -1 ; i--){
+
+                //当遍历到出现有一行的字符数小于特定的长度时，可以判定该行以及该行往上的文本都不是句子的部分。
+                if(item_processed[i].length < 30 && i != 0){
+                    break
+                }
+
+                //将通过判定的行添加到数组前面
+                result_sentence.unshift(item_processed[i]);
+            }
+
+            //数组拼接即得到完整的句子
+            sentence = result_sentence.join('')
+        }else if(item_processed.length == 1){
+            //当句子只占据一行时
+            sentence = item_processed[0]
+        }else{
+            alert('wtf')
+        }
+        return sentence
+    }
 
 </script>  
 </body>
