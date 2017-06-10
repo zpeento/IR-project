@@ -101,12 +101,13 @@
             for(var i = item_processed.length-2 ; i > -1 ; i--){
 
                 //当遍历到出现有一行的字符数小于特定的长度时，可以判定该行以及该行往上的文本都不是句子的部分。
-                if(item_processed[i].length < 30){
+                var item_trimmed = item_processed[i].trim();
+                if(item_trimmed.length < 30){
                     break
                 }
 
                 //将通过判定的行添加到数组前面
-                result_sentence.unshift(item_processed[i]);
+                result_sentence.unshift(item_trimmed);
             }
 
             //数组拼接即得到完整的句子
@@ -137,12 +138,13 @@
             for(var i = item_processed.length-2 ; i > -1 ; i--){
 
                 //当遍历到出现有一行的字符数小于特定的长度时，可以判定该行以及该行往上的文本都不是句子的部分。
-                if(item_processed[i].length < 30 && i != 0){
+                var item_trimmed = item_processed[i].trim();
+                if(item_trimmed.length < 30 && i != 0){
                     break
                 }
 
                 //将通过判定的行添加到数组前面
-                result_sentence.unshift(item_processed[i]);
+                result_sentence.unshift(item_trimmed);
             }
 
             //数组拼接即得到完整的句子
