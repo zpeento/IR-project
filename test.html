@@ -16,8 +16,8 @@
 	//js 读取文件
 	// var str = ''
     //js 读取文件
-    var line_length_min = 20;
-    
+    var line_length_min = 18;
+
     function jsReadFiles(files) {
         if (files.length) {
             var file = files[0];
@@ -55,7 +55,7 @@
     	var arr = str.split(/[。！？]/g);
 
         //测试指定的某一个句子，从而便于修复问题
-        testOneItem(arr[460])
+        testOneItem(arr[3])
     	
         //对每一个未加工的句子进行加工
     	var arr_processed = arr.map(function(item){
@@ -83,7 +83,7 @@
     function testOneItem (oneItem) {
         var item_processed = oneItem.split(/\n/g);
         console.log(item_processed)
-        console.log(senStartWithLineFeeds(item_processed))
+        // console.log(senStartWithLineFeeds(item_processed))
     }
 
     //当段落以换行符开头
@@ -105,6 +105,12 @@
                 //当遍历到出现有一行的字符数小于特定的长度时，可以判定该行以及该行往上的文本都不是句子的部分。
                 var item_trimmed = item_processed[i].trim();
                 if(item_trimmed.length < line_length_min){
+                    break
+                }
+
+                //当该句以‘注：’字开头时，则跳出循环
+                if(item_trimmed[0] == '注' && item_trimmed[1] == '：') {
+                    result_sentence.unshift(item_trimmed)
                     break
                 }
 
@@ -141,7 +147,15 @@
 
                 //当遍历到出现有一行的字符数小于特定的长度时，可以判定该行以及该行往上的文本都不是句子的部分。
                 var item_trimmed = item_processed[i].trim();
+
+                //添加判断条件，当遍历到第一行时，直接通过判定条件
                 if(item_trimmed.length < line_length_min && i != 0){
+                    break
+                }
+
+                //当该句以‘注’字开头时，则将该句添加到结果数组中并跳出循环
+                if(item_trimmed[0] == '注' && item_trimmed[1] == '：') {
+                    result_sentence.unshift(item_trimmed)
                     break
                 }
 
