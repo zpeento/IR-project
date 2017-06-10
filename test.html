@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<form name = "form1" enctype="multipart/form-data">
+		<!-- <input type="file" name="file1" onchange="javascript:jsReadFiles()"> -->
+		jsReadFile:<input type="file" onchange="jsReadFiles(this.files)"/>
+	</form>
+
+   
+  <!-- // function change()  
+  // {   
+  
+  //     console.log(document.form1.file1.value);  
+   
+  // } -->
+  <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>  
+<script Language="JavaScript">
+	//js 读取文件
+	var str = ''
+    //js 读取文件
+    function jsReadFiles(files) {
+        if (files.length) {
+            var file = files[0];
+            var reader = new FileReader();//new一个FileReader实例
+            if (/text+/.test(file.type)) {//判断文件类型，是不是text类型
+                reader.onload = function() {
+                    $('body').append('<pre>' + this.result + '</pre>');
+                    var str = this.result;
+                    clauses(str)
+                }
+                reader.readAsText(file);
+            } else if(/image+/.test(file.type)) {//判断文件是不是imgage类型
+                reader.onload = function() {
+                    $('body').append('<img src="' + this.result + '"/>');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    }
+
+    function clauses (str) {
+    	var arr = str.split(/[。！？]/g);
+    	// var reg = /.{0,30}\n[.\n]*?\n.?$/
+    	var arr_processed = arr.map(function(item){
+    		var item_processed = item.split(/\n/);
+    		var sentence = ''
+    		if(item_processed.length>2){
+    			// item_processed.reverse().map(function(value){
+
+    			// })
+    			//每一行
+    			var last_index = item_processed.length - 1
+    			var result_sentence = [item_processed[last_index]]
+	    		for(let i = item_processed.length-2 ; i > 1 ; i--){
+	    			if(item_processed[i].length < 30){
+	    				break
+	    			}
+	    			result_sentence.unshift(item_processed[i]);
+	    		}
+	    		sentence = result_sentence.join('')
+    		}else if(item_processed.length == 2){
+    			sentence = item_processed[1];
+    		}
+    		return sentence
+    	})
+    	// var arr1 = str.split(/[\n]/g);
+    	console.log(arr_processed)
+    }
+
+
+</script>  
+	<script>
+		// var a = {};
+		// console.log(a instanceof Array)
+		// alert([1,2] + ' ')
+		// alert(NaN == false)
+		// setTimeout(function(){
+		// 	alert(0)
+		// },1000)
+		// setTimeout(function(){
+		// 	alert(1)
+		// },1000)
+		// var a = [];
+		// (function(){
+		// 	a = 5;
+		// 	alert(a);
+		// })(a)
+		// var b = ['a','b','c']
+
+		// function la(a) {
+		// 	console.log(a)
+
+		// 	a.pop();
+		// 	console.log(a)
+		// }
+		// la(b)
+		// console.log(b)
+		
+
+	</script>
+</body>
+</html>
