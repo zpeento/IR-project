@@ -39,23 +39,12 @@
     }
 
     function clauses (str) {
-        // var reg = /.{0,30}\n[.\n]*?\n.?$/
-//         console.log(arr[1])
-//         var aaa = arr[1].split(/\n/g)
-//         console.log(aaa)
-//         var m = ''
-//         for(var j = aaa.length - 1 ; j > 0 ; j--){
-//                     console.log(aaa[j])
-//                     m = aaa[j]+m
-//         }
-        
-// console.log('m= '+m)
 
         //将文章按终止标点符号粗略划分成句子
     	var arr = str.split(/[。！？]/g);
 
         //测试指定的某一个句子，从而便于修复问题
-        testOneItem(arr[3])
+        testOneItem(arr[656])
     	
         //对每一个未加工的句子进行加工
     	var arr_processed = arr.map(function(item){
@@ -89,88 +78,97 @@
     //当段落以换行符开头
     function senStartWithLineFeeds (item_processed) {
         var sentence = '';
+        //获取最后一行（即连接句号的那一行）的下标
+        var last_index = item_processed.length - 1;
 
-        //当该句子的行数大于一时，说明该句子占据多行
-        if(item_processed.length>1){
-                
-            //获取最后一行（即连接句号的那一行）的下标
-            var last_index = item_processed.length - 1
-
-            //result_sentence数组用于存放合适的行
-            var result_sentence = [item_processed[last_index]]
-
-            //对句子的除最后一行外的每一行，以从下往上的顺序进行循环
-            for(var i = item_processed.length-2 ; i > -1 ; i--){
-
-                //当遍历到出现有一行的字符数小于特定的长度时，可以判定该行以及该行往上的文本都不是句子的部分。
-                var item_trimmed = item_processed[i].trim();
-                if(item_trimmed.length < line_length_min){
-                    break
-                }
-
-                //当该句以‘注：’字开头时，则跳出循环
-                if(item_trimmed[0] == '注' && item_trimmed[1] == '：') {
-                    result_sentence.unshift(item_trimmed)
-                    break
-                }
-
-                //将通过判定的行添加到数组前面
-                result_sentence.unshift(item_trimmed);
-            }
-
-            //数组拼接即得到完整的句子
-            sentence = result_sentence.join('')
-        }else if(item_processed.length == 1){
-            //当句子只占据一行时
-            sentence = item_processed[0]
+        //判断最后一行是否以'注：'开头
+        if(item_processed[last_index][0] == '注' && item_processed[last_index][1] =='：'){
+            sentence = item_processed[last_index];
         }else{
-            alert('wtf')
+            //当该句子的行数大于一时，说明该句子占据多行
+            if(item_processed.length>1){
+
+                //result_sentence数组用于存放合适的行
+                var result_sentence = [item_processed[last_index]]
+
+                //对句子的除最后一行外的每一行，以从下往上的顺序进行循环
+                for(var i = item_processed.length-2 ; i > -1 ; i--){
+
+                    //当遍历到出现有一行的字符数小于特定的长度时，可以判定该行以及该行往上的文本都不是句子的部分。
+                    var item_trimmed = item_processed[i].trim();
+                    if(item_trimmed.length < line_length_min){
+                        break
+                    }
+
+                    //当该句以‘注：’字开头时，则跳出循环
+                    if(item_trimmed[0] == '注' && item_trimmed[1] == '：') {
+                        result_sentence.unshift(item_trimmed)
+                        break
+                    }
+
+                    //将通过判定的行添加到数组前面
+                    result_sentence.unshift(item_trimmed);
+                }
+
+                //数组拼接即得到完整的句子
+                sentence = result_sentence.join('')
+            }else if(item_processed.length == 1){
+                //当句子只占据一行时
+                sentence = item_processed[0]
+            }else{
+                alert('wtf')
+            }
         }
+        
         return sentence
     }
 
     //当句子不以换行开头
     function senStartWithNone (item_processed) {
         var sentence = '';
-
-        //当该句子的行数大于一时，说明该句子占据多行
-        if(item_processed.length>1){
-                
-            //获取最后一行（即连接句号的那一行）的下标
-            var last_index = item_processed.length - 1
-
-            //result_sentence数组用于存放合适的行
-            var result_sentence = [item_processed[last_index]]
-
-            //对句子的除最后一行外的每一行，以从下往上的顺序进行循环
-            for(var i = item_processed.length-2 ; i > -1 ; i--){
-
-                //当遍历到出现有一行的字符数小于特定的长度时，可以判定该行以及该行往上的文本都不是句子的部分。
-                var item_trimmed = item_processed[i].trim();
-
-                //添加判断条件，当遍历到第一行时，直接通过判定条件
-                if(item_trimmed.length < line_length_min && i != 0){
-                    break
-                }
-
-                //当该句以‘注’字开头时，则将该句添加到结果数组中并跳出循环
-                if(item_trimmed[0] == '注' && item_trimmed[1] == '：') {
-                    result_sentence.unshift(item_trimmed)
-                    break
-                }
-
-                //将通过判定的行添加到数组前面
-                result_sentence.unshift(item_trimmed);
-            }
-
-            //数组拼接即得到完整的句子
-            sentence = result_sentence.join('')
-        }else if(item_processed.length == 1){
-            //当句子只占据一行时
-            sentence = item_processed[0]
+        //获取最后一行（即连接句号的那一行）的下标
+        var last_index = item_processed.length - 1
+        //判断最后一行是否以'注：'开头
+        if(item_processed[last_index][0] == '注' && item_processed[last_index][1] =='：'){
+            sentence = item_processed[last_index];
         }else{
-            alert('wtf')
+            //当该句子的行数大于一时，说明该句子占据多行
+            if(item_processed.length>1){
+
+                //result_sentence数组用于存放合适的行
+                var result_sentence = [item_processed[last_index]]
+
+                //对句子的除最后一行外的每一行，以从下往上的顺序进行循环
+                for(var i = item_processed.length-2 ; i > -1 ; i--){
+
+                    //当遍历到出现有一行的字符数小于特定的长度时，可以判定该行以及该行往上的文本都不是句子的部分。
+                    var item_trimmed = item_processed[i].trim();
+
+                    //添加判断条件，当遍历到第一行时，直接通过判定条件
+                    if(item_trimmed.length < line_length_min && i != 0){
+                        break
+                    }
+
+                    //当该句以‘注’字开头时，则将该句添加到结果数组中并跳出循环
+                    if(item_trimmed[0] == '注' && item_trimmed[1] == '：') {
+                        result_sentence.unshift(item_trimmed)
+                        break
+                    }
+
+                    //将通过判定的行添加到数组前面
+                    result_sentence.unshift(item_trimmed);
+                }
+
+                //数组拼接即得到完整的句子
+                sentence = result_sentence.join('')
+            }else if(item_processed.length == 1){
+                //当句子只占据一行时
+                sentence = item_processed[0]
+            }else{
+                alert('wtf')
+            }
         }
+
         return sentence
     }
 
