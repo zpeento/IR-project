@@ -51,14 +51,17 @@
 
         //将文章按终止标点符号粗略划分成句子
     	var arr = str.split(/[。！？]/g);
+
+        //测试指定的某一个句子，从而便于修复问题
+        testOneItem(arr[7])
     	
         //对每一个未加工的句子进行加工
     	var arr_processed = arr.map(function(item){
 
             //将句子按换行符划分成行，保存在数组中
     		var item_processed = item.split(/\n/g);
-
-    		var sentence = ''
+    		
+            var sentence = ''
 
             //当该句子的行数大于一时，说明该句子占据多行
     		if(item_processed.length>1){
@@ -73,6 +76,7 @@
 	    		for(var i = item_processed.length-2 ; i > -1 ; i--){
 
                     //当遍历到出现有一行的字符数小于特定的长度时，可以判定该行以及该行往上的文本都不是句子的部分。
+                    //tips!!
 	    			if(item_processed[i].length < 30){
 	    				break
 	    			}
@@ -91,8 +95,13 @@
             }
     		return sentence
     	})
-    	// var arr1 = str.split(/[\n]/g);
-    	console.log(arr_processed)
+
+    	// console.log(arr_processed)
+    }
+
+    function testOneItem (oneItem) {
+        var item_processed = oneItem.split(/\n/g);
+        console.log(item_processed)
     }
 
 
