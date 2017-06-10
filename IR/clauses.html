@@ -6,19 +6,35 @@
 </head>
 <body>
 	<form name = "form1" enctype="multipart/form-data">
-		<!-- <input type="file" name="file1" onchange="javascript:jsReadFiles()"> -->
-		jsReadFile:<input type="file" onchange="jsReadFiles(this.files)"/>
+		jsReadFile:
+        <input type="file" onchange="ruru(this.files)"/>
+		<!-- jsReadFile:<input type="file" id="file_upload"/> -->
 	</form>
 
-
-  <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>  
-    <script Language="JavaScript">
+    <form id="text-options">
+        <!-- <h2>Saving text</h2>
+        <textarea class="input" id="text" placeholder="Once upon a time..."></textarea> -->
+        <!-- <label>Filename: <input type="text" class="filename" id="text-filename" placeholder="a plain document"/>.txt</label> -->
+        <!-- <input type="submit" value="Save"/> -->
+        <button id="aaa">aaa</button>
+    </form>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="lib/FileSaver.min.js"></script>
+      
+    <script>
 
     //js 读取文件
     var line_length_min = 18;
     var text_length_min = 6;
 
-    function jsReadFiles(files) {
+    //保存划分完后的句子
+    var clauses_result = ''
+    // var file_upload = document.querySelector("#file_upload");
+    // console.log(file_upload)
+    // file_upload.onchange = function(this.files) {
+    //     console.log(1) jsReadFiles
+    function ruru(files) {
+        console.log(1)
         if (files.length) {
             var file = files[0];
             var reader = new FileReader();//new一个FileReader实例
@@ -33,7 +49,6 @@
                 reader.onload = function() {
                     $('body').append('<img src="' + this.result + '"/>');
                 }
-                reader.readAsDataURL(file);
             }
         }
     }
@@ -70,7 +85,9 @@
             return sentence
     	})
 
-    	console.log(arr_processed)
+
+    	console.log(arr_processed);
+        clauses_result = arr_processed.join('❤❤❤❤❤❤'); 
     }
 
     //测试一个指定的段落
@@ -178,6 +195,13 @@
         return sentence
     }
 
+    var aaa = document.querySelector('#aaa');
+
+    aaa.onclick = function() {
+        var blob = new Blob([clauses_result], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "mrmoose_clauses.txt");
+    }
+    
 </script>  
 </body>
 </html>
