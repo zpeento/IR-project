@@ -1,4 +1,5 @@
 //章节提取功能
+var extract_result = ''
 
 function chapter_extract (text_raw) {
 	var num_list = ['一','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
@@ -31,11 +32,13 @@ function chapter_extract (text_raw) {
 			console.log(str_pre);
 
 			// var re_match_content = /(.{1})([0-9一二三四五六七八九])(.*?)管理层讨论与分析/;
-			// var re_match_content = new RegExp( '('+target_chap + '.*?)' + str_pre );
-			var re_match_content = /(管理层讨论与分析[\s\S]*?)二/;
+			var re_match_content = new RegExp( '('+target_chap + ')([\\s\\S]*?)' + str_pre );
+			// var re_match_content = /(管理层讨论与分析[\s\S]*?)二/;
 			match_content_arr = text_raw.match(re_match_content);
-			console.log(match_content_arr)
-			
+			console.log(match_content_arr[1])
+			match_content_arr.shift()
+			extract_result = match_content_arr.join('\r\n\r\n');
+
 		}if(match_result.length == 2){
 			
 		}else{
@@ -44,4 +47,13 @@ function chapter_extract (text_raw) {
 	}else{
 		alert('该文本中不存在 ' + target_chap + '字段')
 	}
+}
+
+//下载txt文件
+var button_chapter_extract = document.querySelector('#chapter_extract');
+
+button_chapter_extract.onclick = function() {
+	console.log(extract_result)
+    var blob = new Blob([extract_result], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "mrmoose_extract.txt");
 }
