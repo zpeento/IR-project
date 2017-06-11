@@ -11,6 +11,7 @@
 		<!-- jsReadFile:<input type="file" id="file_upload"/> -->
 	</form>
     <button id="do_clauses">clauses</button>
+    <button id="do_extract">chapter extraction</button>
     <form id="text-options">
         <button id="save_clauses">save</button>
     </form>
@@ -18,6 +19,7 @@
 <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="lib/FileSaver.min.js"></script> 
 <script src="javascript/clauses.js"></script>
+<script src="javascript/chapter_extraction.js"></script>
 <script>
     var txt_raw = ''
 
@@ -39,9 +41,13 @@
     }
 
     var button_do_clauses = document.querySelector("#do_clauses");
-
-    button_do_clauses.onclick = function(){
+    var button_do_extract = document.querySelector("#do_extract");
+    button_do_clauses.onclick = function() {
         clauses(txt_raw)
+    }
+    button_do_extract.onclick = function() {
+        console.log(1)
+        chapter_extract(txt_raw)
     }
 </script>  
 </body>

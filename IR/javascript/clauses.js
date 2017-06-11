@@ -39,7 +39,7 @@ function clauses (str) {
 	})
 
 
-	console.log(arr_processed);
+	// console.log(arr_processed);
     clauses_result = arr_processed.join('\r\n\r\n\r\n'); 
 }
 
