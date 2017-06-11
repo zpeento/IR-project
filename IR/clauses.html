@@ -10,13 +10,39 @@
         <input type="file" onchange="readFile(this.files)"/>
 		<!-- jsReadFile:<input type="file" id="file_upload"/> -->
 	</form>
-
+    <button id="do_clauses">clauses</button>
     <form id="text-options">
         <button id="save_clauses">save</button>
     </form>
 
 <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="lib/FileSaver.min.js"></script> 
-<script src="javascript/clauses.js"></script>  
+<script src="javascript/clauses.js"></script>
+<script>
+    var txt_raw = ''
+
+    function readFile(files) {
+        if (files.length) {
+            var file = files[0];
+            var reader = new FileReader();//new一个FileReader实例
+            if (/text+/.test(file.type)) {//判断文件类型，是不是text类型
+                reader.onload = function() {
+                    // $('body').append('<pre>' + this.result + '</pre>');
+                    txt_raw = this.result;
+                    // clauses(str)
+                }
+                reader.readAsText(file);
+            } else {
+                alert('上传的格式只能为utf-8编码的txt格式文件')
+            }
+        }
+    }
+
+    var button_do_clauses = document.querySelector("#do_clauses");
+
+    button_do_clauses.onclick = function(){
+        clauses(txt_raw)
+    }
+</script>  
 </body>
 </html>

@@ -2,26 +2,9 @@
 var line_length_min = 18;
 var text_length_min = 6;
 
+// var raw
 //保存划分完后的句子
 var clauses_result = ''
-
-function readFile(files) {
-    console.log(1)
-    if (files.length) {
-        var file = files[0];
-        var reader = new FileReader();//new一个FileReader实例
-        if (/text+/.test(file.type)) {//判断文件类型，是不是text类型
-            reader.onload = function() {
-                // $('body').append('<pre>' + this.result + '</pre>');
-                var str = this.result;
-                clauses(str)
-            }
-            reader.readAsText(file);
-        } else {
-            alert('上传的格式只能为utf-8编码的txt格式文件')
-        }
-    }
-}
 
 function clauses (str) {
 
