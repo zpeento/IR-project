@@ -9,10 +9,11 @@ var clauses_result = ''
 function clauses (str) {
 
     //将文章按终止标点符号粗略划分成句子
-	var arr = str.split(/[。！？]/g);
+    var arr = str.match(/[\s\S]*?[。！？]/g)
+	// var arr = str.split(/[。！？]/g);
 
     //测试指定的某一个句子，从而便于修复问题
-    testOneItem(arr[0])
+    testOneItem(arr[70])
 	
     //对每一个未加工的句子进行加工
 	var arr_processed = arr.map(function(item){
@@ -51,8 +52,19 @@ function testOneItem (oneItem) {
     var item_processed = oneItem.split(/\n/g);
     console.log(item_processed[0].trim() == '')
     console.log(item_processed)
-    console.log(senStartWithLineFeeds(item_processed))
+    // console.log(senStartWithLineFeeds(item_processed))
     // console.log(senStartWithNone(item_processed))
+    if(item_processed[0].trim() == ''){
+            // console.log("senStartWithLineFeeds")
+        sentence = senStartWithLineFeeds(item_processed)
+        console.log(1)
+        console.log(sentence)
+    }else{
+        // console.log("senStartWithNone")
+        sentence = senStartWithNone(item_processed)
+        console.log(2)
+        console.log(sentence)
+    }
 }
 
 //当段落以换行符开头
@@ -81,7 +93,7 @@ function senStartWithLineFeeds (item_processed) {
                 if(item_trimmed.length < line_length_min){
 
                     //增加判断条件：当该行全部只由数字组成，判定该行为页码,跳过该行
-                    if(/^\d+$/.test(item_trimmed)){
+                    if(/^\d+$/.test(item_trimmed) || /^-\s\d+\s-$/.test(item_trimmed)){
                         continue
                     }else{
                         break
@@ -92,6 +104,11 @@ function senStartWithLineFeeds (item_processed) {
                 if(item_trimmed[0] == '注' && item_trimmed[1] == '：') {
                     result_sentence.unshift(item_trimmed)
                     break
+                }
+
+                //当一句中连续出现12个以上空格，判定其为页脚{}
+                if(/\s{12,}/.test(item_trimmed)){
+                    continue
                 }
 
                 //将通过判定的行添加到数组前面
@@ -136,7 +153,8 @@ function senStartWithNone (item_processed) {
                 //添加判断条件，当遍历到第一行时，直接通过判定条件
                 if(item_trimmed.length < line_length_min && i != 0){
                     //增加判断条件：当该行全部只由数字组成，判定该行为页码,跳过该行
-                    if(!(/^\d+$/.test(item_trimmed))){
+                    //目前收集 2 和 -2-两种形式
+                    if(/^\d+$/.test(item_trimmed) || /^-\s\d+\s-$/.test(item_trimmed)){
                         continue
                     }else{
                         break
