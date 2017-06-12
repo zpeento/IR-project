@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>mr. Moose 分句</title>
 </head>
 <body>
 	<form name = "form1" enctype="multipart/form-data">
@@ -13,10 +13,10 @@
 
   <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>  
     <script Language="JavaScript">
-	//js 读取文件
-	// var str = ''
+
     //js 读取文件
     var line_length_min = 18;
+    var text_length_min = 6;
 
     function jsReadFiles(files) {
         if (files.length) {
@@ -44,7 +44,7 @@
     	var arr = str.split(/[。！？]/g);
 
         //测试指定的某一个句子，从而便于修复问题
-        testOneItem(arr[656])
+        testOneItem(arr[343])
     	
         //对每一个未加工的句子进行加工
     	var arr_processed = arr.map(function(item){
@@ -62,6 +62,11 @@
                 sentence = senStartWithNone(item_processed)
             }
 
+            //增加判定，当文本长度小于一定值时，文本一定构不成主谓结构句子。
+            if(sentence.length < text_length_min){
+                sentence = ''
+            }
+
             return sentence
     	})
 
@@ -73,6 +78,7 @@
         var item_processed = oneItem.split(/\n/g);
         console.log(item_processed)
         // console.log(senStartWithLineFeeds(item_processed))
+        console.log(senStartWithNone(item_processed))
     }
 
     //当段落以换行符开头
@@ -119,7 +125,7 @@
                 alert('wtf')
             }
         }
-        
+
         return sentence
     }
 

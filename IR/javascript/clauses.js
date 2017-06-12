@@ -12,7 +12,7 @@ function clauses (str) {
 	var arr = str.split(/[。！？]/g);
 
     //测试指定的某一个句子，从而便于修复问题
-    testOneItem(arr[112])
+    testOneItem(arr[0])
 	
     //对每一个未加工的句子进行加工
 	var arr_processed = arr.map(function(item){
@@ -24,9 +24,11 @@ function clauses (str) {
 
         //item_processed数组第一项是空字符串，即说明该段落以换行符开头。否则即不以换行符开头
 
-        if(item_processed[0] == ''){
+        if(item_processed[0].trim() == ''){
+            // console.log("senStartWithLineFeeds")
             sentence = senStartWithLineFeeds(item_processed)
         }else{
+            // console.log("senStartWithNone")
             sentence = senStartWithNone(item_processed)
         }
 
@@ -47,13 +49,15 @@ function clauses (str) {
 //测试一个指定的段落
 function testOneItem (oneItem) {
     var item_processed = oneItem.split(/\n/g);
+    console.log(item_processed[0].trim() == '')
     console.log(item_processed)
-    // console.log(senStartWithLineFeeds(item_processed))
-    console.log(senStartWithNone(item_processed))
+    console.log(senStartWithLineFeeds(item_processed))
+    // console.log(senStartWithNone(item_processed))
 }
 
 //当段落以换行符开头
 function senStartWithLineFeeds (item_processed) {
+    
     var sentence = '';
     //获取最后一行（即连接句号的那一行）的下标
     var last_index = item_processed.length - 1;
@@ -77,7 +81,7 @@ function senStartWithLineFeeds (item_processed) {
                 if(item_trimmed.length < line_length_min){
 
                     //增加判断条件：当该行全部只由数字组成，判定该行为页码,跳过该行
-                    if(!(/^\d+$/.test(item_trimmed))){
+                    if(/^\d+$/.test(item_trimmed)){
                         continue
                     }else{
                         break
@@ -109,6 +113,7 @@ function senStartWithLineFeeds (item_processed) {
 
 //当句子不以换行开头
 function senStartWithNone (item_processed) {
+
     var sentence = '';
     //获取最后一行（即连接句号的那一行）的下标
     var last_index = item_processed.length - 1
