@@ -2,7 +2,17 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>mr. Moose</title>
+    <style>
+        #text_show{
+            width: 400px;
+        }
+        pre{
+            white-space: pre-wrap;
+            width: 400px;
+        }
+    </style>
+
 </head>
 <body>
 	<form name = "form1" enctype="multipart/form-data">
@@ -17,12 +27,17 @@
         <button id="chapter_extract">save extract</button>
     </form>
 
+    <div id="text_show">
+        <pre></pre>
+    </div>
+
 <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="lib/FileSaver.min.js"></script> 
 <script src="javascript/clauses.js"></script>
 <script src="javascript/chapter_extraction.js"></script>
 <script>
     var txt_raw = ''
+    var button_text_show = $("#text_show pre");
 
     function readFile(files) {
         if (files.length) {

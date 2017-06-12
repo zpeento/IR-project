@@ -1,5 +1,5 @@
 //js 读取文件
-var line_length_min = 18;
+var line_length_min = 16;
 var text_length_min = 6;
 
 // var raw
@@ -12,7 +12,7 @@ function clauses (str) {
 	var arr = str.split(/[。！？]/g);
 
     //测试指定的某一个句子，从而便于修复问题
-    testOneItem(arr[343])
+    testOneItem(arr[112])
 	
     //对每一个未加工的句子进行加工
 	var arr_processed = arr.map(function(item){
@@ -39,8 +39,9 @@ function clauses (str) {
 	})
 
 
-	// console.log(arr_processed);
-    clauses_result = arr_processed.join('\r\n\r\n\r\n'); 
+	console.log(arr_processed);
+    clauses_result = arr_processed.join('\r\n\r\n\r\n');
+    button_text_show.html(clauses_result) 
 }
 
 //测试一个指定的段落
@@ -72,8 +73,15 @@ function senStartWithLineFeeds (item_processed) {
 
                 //当遍历到出现有一行的字符数小于特定的长度时，可以判定该行以及该行往上的文本都不是句子的部分。
                 var item_trimmed = item_processed[i].trim();
+                
                 if(item_trimmed.length < line_length_min){
-                    break
+
+                    //增加判断条件：当该行全部只由数字组成，判定该行为页码,跳过该行
+                    if(!(/^\d+$/.test(item_trimmed))){
+                        continue
+                    }else{
+                        break
+                    }
                 }
 
                 //当该句以‘注：’字开头时，则跳出循环
@@ -90,7 +98,7 @@ function senStartWithLineFeeds (item_processed) {
             sentence = result_sentence.join('')
         }else if(item_processed.length == 1){
             //当句子只占据一行时
-            sentence = item_processed[0]
+            sentence = item_processed[0].trim()
         }else{
             alert('wtf')
         }
@@ -122,7 +130,12 @@ function senStartWithNone (item_processed) {
 
                 //添加判断条件，当遍历到第一行时，直接通过判定条件
                 if(item_trimmed.length < line_length_min && i != 0){
-                    break
+                    //增加判断条件：当该行全部只由数字组成，判定该行为页码,跳过该行
+                    if(!(/^\d+$/.test(item_trimmed))){
+                        continue
+                    }else{
+                        break
+                    }
                 }
 
                 //当该句以‘注’字开头时，则将该句添加到结果数组中并跳出循环
@@ -155,3 +168,5 @@ button_save_clauses.onclick = function() {
     var blob = new Blob([clauses_result], {type: "text/plain;charset=utf-8"});
     saveAs(blob, "mrmoose_clauses.txt");
 }
+
+//将分句结果展示到页面
