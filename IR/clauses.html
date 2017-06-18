@@ -3,38 +3,126 @@
 <head>
 	<meta charset="UTF-8">
 	<title>mr. Moose</title>
+    <script src="lib/jquery-2.1.1.min.js"></script>
     <style>
-        #text_show{
-            width: 400px;
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ::selection
+        {
+            color: #fff;
+            background-color:rgb(242,156,177);
+        }
+        ::-moz-selection
+        {
+            color: #fff;
+            background-color:rgb(242,156,177);
+        }
+        #wrap{
+            display: flex;
+            /*justify:*/
+        }
+        #sidebar{
+            width: 360px;
+            background-color: #B4D8F3;
+            
+            height: 100vh;
+            text-align: center;
+            z-index: 100;
+            min-width: 360px;
+        }
+        #text_show_container{
+            flex:1 1 auto;
+            min-width: 600px;
+            padding-left: 80px;
+            /*background-color: #333;*/
+            background-color: #f5f5f5;
+            /*padding-top: 40px;*/
+            padding-right: 60px;
+            height: 100vh;
+            overflow: auto;
         }
         pre{
+            margin-top: 40px;
             white-space: pre-wrap;
-            width: 400px;
+            width: 100%;
+            background-color: #f5f5f5;
+            border: 0;
+            font-size: 20px;
+            font-family: "Microsoft Yahei";
+            color: #666
+        }
+        #sidebar{
+            box-shadow: 2px 0 4px #666;
+        }
+        .title{
+            /*text-align: center;*/
+            margin-top: 60px;
+            display: flex;
+            justify-content:space-around;
+            align-items: center;
+        }
+        h1{
+            /*padding-right: 20px;*/
+            letter-spacing: 5px;
+            color: #38667D;
+        }
+        #upload_input{
+            font-family: "Microsoft Yahei";
+            /*font-size: 20px;*/
+            color: #38667D;
+            
+        }
+        button{
+            width: 300px;
+            height: 40px;
+            border: 0px;
+            color: #fff;
+            background-color:#38667D;
+            font-size: 20px;
+        }
+        
+        #text-options{
+            margin-top: 20px;
+        }
+        #save_form{
+            margin-top: 40px;
+        }
+        #do_clauses{
+            margin-top: 40px;
         }
     </style>
 
 </head>
 <body>
-	<form name = "form1" enctype="multipart/form-data">
-		jsReadFile:
-        <input type="file" onchange="readFile(this.files)"/>
-		<!-- jsReadFile:<input type="file" id="file_upload"/> -->
-	</form>
-    <button id="do_clauses">clauses</button>
-    <button id="do_extract">chapter extraction</button>
-    <form id="text-options">
-        <button id="save_clauses">save clauses</button>
-        <button id="chapter_extract">save extract</button>
-    </form>
-
-    <div id="text_show">
-        <pre></pre>
+	<div id="wrap">
+        <div id="sidebar">
+            <div class="title">
+                <img src="images/moose.png" alt="">
+                <h1>年报分句</h1>
+            </div>
+            
+            
+            <button id="do_clauses">开始分句</button>
+            <form id="text-options">
+                <button id="save_clauses">保存分句</button>
+            </form>
+            <form name = "form1" enctype="multipart/form-data" id="save_form">
+                <input type="file" id="upload_input" onchange="readFile(this.files)"/>  
+            <!-- jsReadFile:<input type="file" id="file_upload"/> -->
+            </form>
+        </div>
+        <div id="text_show_container">
+            <div id="text_show">
+                <pre></pre>
+            </div>
+        </div>
     </div>
 
-<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
 <script src="lib/FileSaver.min.js"></script> 
 <script src="javascript/clauses.js"></script>
-<script src="javascript/chapter_extraction.js"></script>
 <script>
     var txt_raw = ''
     var button_text_show = $("#text_show pre");
@@ -57,14 +145,10 @@
     }
 
     var button_do_clauses = document.querySelector("#do_clauses");
-    var button_do_extract = document.querySelector("#do_extract");
     button_do_clauses.onclick = function() {
         clauses(txt_raw)
     }
-    button_do_extract.onclick = function() {
-        console.log(1)
-        chapter_extract(txt_raw)
-    }
+
 </script>  
 </body>
 </html>

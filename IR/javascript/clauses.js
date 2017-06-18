@@ -1,19 +1,26 @@
 //js 读取文件
-var line_length_min = 16;
+var line_length_min = 14;
 var text_length_min = 6;
 
 // var raw
 //保存划分完后的句子
 var clauses_result = ''
+var title_arr = []
 
 function clauses (str) {
 
+    // var report_title = str.match(/^[\s\S]+?年度报告/)[0].trim();
+    // var report_title_arr = report_title.split(' ')
+    // var reg_title_first = report_title_arr[0]
+    // var reg_title_last = report_title.match(//)
+    // title_arr.push(reg_title_first)
+    // title_arr.push(reg_title_last)
     //将文章按终止标点符号粗略划分成句子
-    var arr = str.match(/[\s\S]*?[。！？]/g)
+    var arr = str.match(/[\s\S]*?[。！？；]/g)
 	// var arr = str.split(/[。！？]/g);
 
     //测试指定的某一个句子，从而便于修复问题
-    testOneItem(arr[70])
+    testOneItem(arr[126])
 	
     //对每一个未加工的句子进行加工
 	var arr_processed = arr.map(function(item){
@@ -77,7 +84,11 @@ function senStartWithLineFeeds (item_processed) {
     //判断最后一行是否以'注：'开头
     if(item_processed[last_index][0] == '注' && item_processed[last_index][1] =='：'){
         sentence = item_processed[last_index];
-    }else{
+    }
+    else if(item_processed[last_index][0] == '注' && item_processed[last_index][2] =='：'){
+        sentence = item_processed[last_index];
+    }
+    else{
         //当该句子的行数大于一时，说明该句子占据多行
         if(item_processed.length>1){
 
@@ -105,10 +116,21 @@ function senStartWithLineFeeds (item_processed) {
                     result_sentence.unshift(item_trimmed)
                     break
                 }
-
+                if(item_trimmed[0] == '注' && item_trimmed[2] =='：'){
+                    result_sentence.unshift(item_trimmed)
+                    break
+                }
+                if(item_trimmed[0] == '【' && item_trimmed[1] =='注' && item_trimmed[2] == '】'){
+                    result_sentence.unshift(item_trimmed)
+                    break
+                }
                 //当一句中连续出现12个以上空格，判定其为页脚{}
-                if(/\s{12,}/.test(item_trimmed)){
+                if(/\s{10,}/.test(item_trimmed)){
                     continue
+                }
+
+                if(/[\s,\.\d]{12,}/.test(item_trimmed)){
+                    break
                 }
 
                 //将通过判定的行添加到数组前面
@@ -137,7 +159,11 @@ function senStartWithNone (item_processed) {
     //判断最后一行是否以'注：'开头
     if(item_processed[last_index][0] == '注' && item_processed[last_index][1] =='：'){
         sentence = item_processed[last_index];
-    }else{
+    }
+    else if(item_processed[last_index][0] == '注' && item_processed[last_index][2] =='：'){
+        sentence = item_processed[last_index];
+    }
+    else{
         //当该句子的行数大于一时，说明该句子占据多行
         if(item_processed.length>1){
 
@@ -166,7 +192,24 @@ function senStartWithNone (item_processed) {
                     result_sentence.unshift(item_trimmed)
                     break
                 }
+                if(item_trimmed[0] == '注' && item_trimmed[2] =='：'){
+                    result_sentence.unshift(item_trimmed)
+                    break
+                }
+                if(item_trimmed[0] == '【' && item_trimmed[1] =='注' && item_trimmed[2] == '】'){
+                    result_sentence.unshift(item_trimmed)
+                    break
+                }
 
+                //当一句中连续出现12个以上空格，判定其为页脚{}
+
+                if(/\s{12,}/.test(item_trimmed)){
+                    continue
+                }
+
+                if(/[\s,\.\d]{12,}/.test(item_trimmed)){
+                    break
+                }
                 //将通过判定的行添加到数组前面
                 result_sentence.unshift(item_trimmed);
             }
